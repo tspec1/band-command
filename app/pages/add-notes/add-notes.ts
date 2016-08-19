@@ -56,6 +56,8 @@ export class AddNotesPage {
     }
 
     UpdateNote(note: INote): void {
+        console.log('updatenote');
+        console.log(note);
         if (note === this.Note) {
             this.Note = null;
             return;
@@ -67,6 +69,7 @@ export class AddNotesPage {
         } else {
             this.Accidental = null;
         }
+        console.log(this.Note);
     }
 
     UpdateAccidental(accidental: IAccidental): void {

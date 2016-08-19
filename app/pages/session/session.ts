@@ -4,6 +4,7 @@ import { NavController } from 'ionic-angular';
 import { OnInit } from '@angular/core';
 import { NoteService } from '../../providers/note-service/note-service';
 import { NoteQueueService } from '../../providers/note-queue-service/note-queue-service';
+import { NoteObserver } from '../../providers/note-observer/note-observer';
 import { INote } from '../../models/i-note';
 import { IAccidental } from '../../models/i-accidental';
 import { LoadingController } from 'ionic-angular';
@@ -21,7 +22,7 @@ import { Flat } from '../../models/flat';
     providers: [
         NavController,
         NoteService,
-        //NoteQueueService,
+        NoteObserver,
         LoadingController
     ]
 })
@@ -35,6 +36,7 @@ export class SessionPage {
         private navCtrl: NavController,
         private noteService: NoteService,
         private noteQueueService: NoteQueueService,
+        private noteObserver: NoteObserver,
         private loadingController: LoadingController
     ) {
 
@@ -45,11 +47,11 @@ export class SessionPage {
     }
 
     GetData(): void {
-        let loader = this.loadingController.create({
-            content: "Please wait...",
-            duration: 100
-        });
-        loader.present();
+        //let loader = this.loadingController.create({
+        //    content: "Please wait...",
+        //    duration: 100
+        //});
+        //loader.present();
 
         let initData: INote[] = this.noteQueueService.GetQueue(this.DisplayAmount);
         this.UpdateNote(initData);
@@ -61,7 +63,7 @@ export class SessionPage {
     }
 
     StartSubscription() {
-        this.NoteSubscription = this.noteQueueService.ObserveNotes(this.DisplayAmount).subscribe(res => {
+        this.NoteSubscription = this.noteObserver.ObserveNotes(this.DisplayAmount).subscribe(res => {
             console.log('data returned:');
             console.log(res);
             this.UpdateNote(res);
@@ -80,9 +82,9 @@ export class SessionPage {
     SwipeEvent(event: any) {
         console.log(event);
         let data: INote[] = this.noteQueueService.Dequeue(this.DisplayAmount);
-        if (data === null || data.length === 0) {
-            this.StopSubscription();
-        }
+        //if (data === null || data.length === 0) {
+        //    this.StopSubscription();
+        //}
         this.UpdateNote(data);
     }
 
