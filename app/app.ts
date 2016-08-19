@@ -2,6 +2,16 @@ import {Component} from '@angular/core';
 import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
+//import {provide} from '@angular/core';
+import {NoteQueueService} from './providers/note-queue-service/note-queue-service';
+
+//// Imports for loading & configuring the in-memory web api
+//import { XHRBackend } from '@angular/http';
+//import { InMemoryBackendService, SEED_DATA } from 'angular2-in-memory-web-api';
+//import { InMemoryDataService }               from './providers/in-memory-data-service/in-memory-data-service';
+//// The usual bootstrapping imports
+//import { HTTP_PROVIDERS } from '@angular/http';
+
 
 
 @Component({
@@ -22,4 +32,12 @@ export class MyApp {
   }
 }
 
-ionicBootstrap(MyApp);
+ionicBootstrap(MyApp
+    , [
+        NoteQueueService
+    ]
+    //, [
+    //HTTP_PROVIDERS,
+    //provide(
+    //]
+);
