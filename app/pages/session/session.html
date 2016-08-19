@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>session</ion-title>
+    <ion-title>Select Note</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,15 +15,10 @@
 
 <ion-content padding>
     <ion-grid>
-        <ion-row *ngIf="Notes.length > 0">
-            <ion-col width-33 *ngFor="let note of Notes | slice:0:3">{{ note.Letter }}</ion-col>
-        </ion-row>
-        <ion-row *ngIf="Notes.length > 3">
-            <ion-col width-33 *ngFor="let note of Notes | slice:3:6">{{ note.Letter }}</ion-col>
-        </ion-row>
-        <ion-row *ngIf="Notes.length > 6">
-            <ion-col width-33 *ngFor="let note of Notes | slice:6:9">{{ note.Letter }}</ion-col>
-            <ion-col width-33 *ngFor="let accidental of Accidentals">{{ accidental.Display }}</ion-col>
+        <ion-row *ngIf="Note" (swipe)="SwipeEvent($event)">
+            <ion-col>
+                <div class="current-note">{{ Note.GetDisplay() }}</div>
+            </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>

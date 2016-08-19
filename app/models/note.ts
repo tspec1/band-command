@@ -16,17 +16,35 @@ export class Note implements INote {
         this.HasFlat = hasFlat;
     }
 
-    UpdateAccidental(option: string): void {
-        switch (option) {
-            case Sharp._Name:
-                this.Accidental = new Sharp();
-                break;
-            case Flat._Name:
-                this.Accidental = new Flat();
-                break;
-            default:
-                this.Accidental = null;
-                break;
+    UpdateAccidental(accidental: IAccidental): boolean {
+        if (!this.HasAccidental(accidental)) {
+            return false;
         }
+        this.Accidental = accidental;
+        return true;
+    }
+
+    HasAccidental(accidental: IAccidental): boolean {
+        if (accidental === null) {
+            return false;
+        }
+        switch (accidental.Name) {
+            case Sharp._Name:
+                return this.HasSharp;
+            case Flat._Name:
+                return this.HasFlat;
+            default:
+                return false;
+        }
+    }
+
+    GetDisplay(): string {
+        let result: string = this.Letter;
+
+        if (this.Accidental) {
+            result += this.Accidental.Display;
+        }
+
+        return result;
     }
 }

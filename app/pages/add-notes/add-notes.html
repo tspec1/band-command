@@ -1,0 +1,58 @@
+<!--
+  Generated template for the SessionPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Add Note</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-grid>
+        <ion-row *ngIf="Notes.length > 0">
+            <ion-col width-33 *ngFor="let note of Notes | slice:0:3">
+                <button (click)="UpdateNote(note)" block light class="square" [class.selected]="Note && note.Letter === Note.Letter">{{ note.Letter }}</button>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="Notes.length > 3">
+            <ion-col width-33 *ngFor="let note of Notes | slice:3:6">
+                <button (click)="UpdateNote(note)" block light class="square" [class.selected]="Note && note.Letter === Note.Letter">{{ note.Letter }}</button>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="Notes.length > 6">
+            <ion-col width-33 *ngFor="let note of Notes | slice:6:9">
+                <button (click)="UpdateNote(note)" block light class="square" [class.selected]="Note && note.Letter === Note.Letter">{{ note.Letter }}</button>
+            </ion-col>
+            <ion-col width-33 *ngFor="let accidental of Accidentals">
+                <button (click)="UpdateAccidental(accidental)" block class="square default" [class.selected]="Note && Note.Accidental && accidental.Name === Note.Accidental.Name" [ngClass]="{ 'button-clear button-clear-light': (Note && !Note.HasAccidental(accidental)) }">{{ accidental.Display }}</button>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="Note">
+            <ion-col>
+                <div class="selected-note">{{ Note.GetDisplay() }}</div>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="Note">
+            <ion-col>
+                <button block (click)="SendNote()">
+                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                    Send Note
+                </button>
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="Note">
+            <ion-col>
+                <button block light (click)="Clear()">
+                    <ion-icon name="close"></ion-icon>
+                    Clear
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

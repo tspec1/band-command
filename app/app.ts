@@ -3,6 +3,7 @@ import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
 //import {provide} from '@angular/core';
+import {NoteQueueService} from './providers/note-queue-service/note-queue-service';
 
 //// Imports for loading & configuring the in-memory web api
 //import { XHRBackend } from '@angular/http';
@@ -32,6 +33,9 @@ export class MyApp {
 }
 
 ionicBootstrap(MyApp
+    , [
+        NoteQueueService
+    ]
     //, [
     //HTTP_PROVIDERS,
     //provide(

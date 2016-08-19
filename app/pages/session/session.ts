@@ -3,8 +3,12 @@ import { NavController } from 'ionic-angular';
 
 import { OnInit } from '@angular/core';
 import { NoteService } from '../../providers/note-service/note-service';
+import { NoteQueueService } from '../../providers/note-queue-service/note-queue-service';
 import { INote } from '../../models/i-note';
 import { IAccidental } from '../../models/i-accidental';
+import { LoadingController } from 'ionic-angular';
+import { Sharp } from '../../models/sharp';
+import { Flat } from '../../models/flat';
 
 /*
   Generated class for the SessionPage page.
@@ -14,13 +18,25 @@ import { IAccidental } from '../../models/i-accidental';
 */
 @Component({
     templateUrl: 'build/pages/session/session.html',
-    providers: [NoteService]
+    providers: [
+        NavController,
+        NoteService,
+        //NoteQueueService,
+        LoadingController
+    ]
 })
 export class SessionPage {
+    Note: INote = null;
     Notes: INote[] = [];
-    Accidentals: IAccidental[] = [];
+    NoteSubscription: any = null;//Subscription
+    DisplayAmount: number = 1;
 
-    constructor(private navCtrl: NavController, private noteService: NoteService) {
+    constructor(
+        private navCtrl: NavController,
+        private noteService: NoteService,
+        private noteQueueService: NoteQueueService,
+        private loadingController: LoadingController
+    ) {
 
     }
 
@@ -29,8 +45,45 @@ export class SessionPage {
     }
 
     GetData(): void {
-        this.noteService.GetNotes().then(notes => this.Notes = notes);
-        this.noteService.GetAccidentals().then(accidentals => this.Accidentals = accidentals);
+        let loader = this.loadingController.create({
+            content: "Please wait...",
+            duration: 100
+        });
+        loader.present();
+
+        let initData: INote[] = this.noteQueueService.GetQueue(this.DisplayAmount);
+        this.UpdateNote(initData);
+        this.StartSubscription();
+    }
+
+    UpdateNote(data: INote[]): void {
+        this.Note = data !== null ? data[0] : null;
+    }
+
+    StartSubscription() {
+        this.NoteSubscription = this.noteQueueService.ObserveNotes(this.DisplayAmount).subscribe(res => {
+            console.log('data returned:');
+            console.log(res);
+            this.UpdateNote(res);
+        });
+    }
+
+    StopSubscription() {
+        if (this.NoteSubscription === null) {
+            return;
+        }
+        this.NoteSubscription.unsubscribe();
+        this.NoteSubscription = null;
+    }
+
+    // for now, let anyone swipe away. TODO: will only be for leader
+    SwipeEvent(event: any) {
+        console.log(event);
+        let data: INote[] = this.noteQueueService.Dequeue(this.DisplayAmount);
+        if (data === null || data.length === 0) {
+            this.StopSubscription();
+        }
+        this.UpdateNote(data);
     }
 
 }

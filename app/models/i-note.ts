@@ -6,5 +6,7 @@ export interface INote {
     HasSharp: boolean;
     HasFlat: boolean;
 
-    UpdateAccidental(option: string): void;
+    UpdateAccidental(accidental: IAccidental): void;
+    HasAccidental(accidental: IAccidental): boolean;
+    GetDisplay(): string;
 }
